@@ -83,7 +83,7 @@ class Character {
     let maxHeight = this.y - 100;
     const jump = setInterval(() => {
         if (this.y = maxHeight){
-            this.y -= 9.8;
+            this.y -= 9.81;
         }
         else {
             clearInterval(jump);
@@ -93,12 +93,32 @@ class Character {
     }, 20);
   };
 
-  fall() {};
+  fall() {
+    const gravity = setInterval(() => {
+        if (this.y < 300){
+            this.y += 9.81;
+        }
+        else {
+            clearInterval(gravity);
+        }
+        this.updatePosition();
+    }, 20);
+  };
 
-  updatePosition() {};
+  updatePosition() {
+    this.element.style.left = `${this.x}px`;
+    this.element.style.top = `${this.x}px`;
+  };
 
-  collisionWith() {};
-}
+  collisionWith() {
+    return (
+        this.x < object.x + object.width &&
+        this.x + this.width > objeto.x &&
+        this.y < object.y + object.height &&
+        this.y + this.height > object.y
+    );
+  };
+};
 
 class Coin {};
 
