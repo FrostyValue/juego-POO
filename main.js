@@ -120,6 +120,21 @@ class Character {
   };
 };
 
-class Coin {};
+class Coin {
+    constructor() {
+      this.x = Math.random() * 700 + 50;
+      this.y = Math.random() * 250 + 50;
+      this.width = 30;
+      this.height = 30;
+      this.element = document.createElement("div");
+      this.element.classList.add("moneda");
+      this.updatePosition();  
+    };
+
+    updatePosition() {
+        this.element.style.left = `${this.x}px`;
+        this.element.style.top = `${this.x}px`;
+    };
+};
 
 const game = new Game();
