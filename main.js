@@ -23,16 +23,47 @@ class Game {
     };
 
     addEvents() {
-
+        window.addEventListener("keydown",(e) => this.character.move(e));
+        this.checkCollisions();
     };
 
     checkCollisions() {
-
+        setInterval(() => {
+            this.coins.forEach((coin, index) => {
+                if (this.character.collisionWith(coin)){
+                    this.container.removeChild(coin.element);
+                    this.coins.splice(index, 1);
+                };
+            })
+        });
     };
 
 };
 
 class Character {
+    constructor() {
+
+        };
+
+        move() {
+
+        };
+
+        jump() {
+
+        };
+
+        fall() {
+
+        };
+
+        updatePosition() {
+
+        };
+
+        collisionWith() {
+
+        };
 
 };
 
