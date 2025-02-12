@@ -4,36 +4,54 @@ body {
   overflow: hidden;
   background-color: #b8b8b8;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
   flex-direction: column;
 }
+
+/*USAR VW (ancho) y VH (alto) SIEMPRE COMO UNIDAD */
+
 #game-container {
   position: relative;
-  width: 800px;
-  height: 400px;
+  width: 90vw;
+  max-width: 1400px;
+  height: 60vh;  
+  max-height: 600px;
   margin: 20px auto;
-  border: 10px solid #6d6d6d;
-  background: #fff;
+  border: 2px solid #6d6d6d;
+  background-image: url("/public/images/background-Game.avif");
+  background-repeat: no-repeat;
+  background-size: cover;
   overflow: hidden;
   border-radius: 30px;
 }
 
 .personaje {
   position: absolute;
-  width: 50px;
-  height: 50px;
-  background-color: #07a07c;
-  border-radius: 50%;
-  border: 5px solid #07a050;
+  width: 5vw;
+  max-width: 50px;
+  height: 5vh;
+  max-height: 50px;
+  background-image: url("public/images/mainCharacter.webp");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
-
 .moneda {
   position: absolute;
-  width: 30px;
-  height: 30px;
-  background-color: gold;
-  border-radius: 50%;
-  box-shadow: 0 0 10px 2px rgba(255, 223, 0, 0.8);
+  width: 3vw;
+  max-width: 30px;
+  height: 3vh;
+  max-height: 30px;
+  background-image: url("public/images/bricks.avif");
+}
+
+.coin-fall {
+  animation: fall 2s forwards;
+}
+
+@keyframes fall {
+  from { transform: translateY(0); }
+  to { top: 600px; opacity: 0; }
 }
