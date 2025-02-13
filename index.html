@@ -3,15 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Brick breaker</title>
+    <title>Asteroid breaker</title>
     <link rel="stylesheet" href="style.css" />
     <script type="module" src="main.js" defer></script>
   </head>
   <body>
-    <h1>Brick Breaker</h1>
+    <h1>ASTEROID BREAKER</h1>
     <div id="puntos"></div>
-    <div id="game-container"></div>
+    <div id="game-container">
+      <span id="container-text"></span>
+    </div>
     <button id="resetButton" type="button">Reset</button>
+
+    <button class="collapsible"><h3>Controles del Juego</h3></button>
+    <div class="bb__collapsible">
+      <div class="controls-container">
+        <ul class="controls-list">
+          <li><span class="key">W</span> / <span class="key">↑</span> - Saltar</li>
+          <li><span class="key">A</span> / <span class="key">←</span> - Mover Izquierda</li>
+          <li><span class="key">D</span> / <span class="key">→</span> - Mover Derecha</li>
+          <li><span class="key">R</span> - Reiniciar</li>
+        </ul>
+      </div>
+    </div>
+
     <audio id="audioJump" src="public/audio/jump.mp3"></audio>
     <audio id="audioEnd" src="public/audio/endGame.mp3"></audio>
   </body>
