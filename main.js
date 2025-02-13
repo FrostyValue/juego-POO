@@ -75,15 +75,27 @@ class Game {
 
 }
 
-class Character {
+class Entity {
+  constructor(x, y, width, height) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.element = document.createElement("div");
+  }
+
+  updatePosition() {
+    this.element.style.left = `${this.x}px`;
+    this.element.style.top = `${this.y}px`;
+  }
+
+}
+
+class Character extends Entity {
   constructor() {
-    this.x = 650;
-    this.y = 530;
-    this.width = 50;
-    this.height = 50;
+    super(650, 530, 50, 50);
     this.speed = 10;
     this.jumping = false;
-    this.element = document.createElement("div");
     this.element.classList.add("personaje");
     this.updatePosition();
   }
@@ -109,7 +121,7 @@ class Character {
     const jumpInterval = setInterval(() => {
       if (this.y > maxHeight) {
         this.y -= 10;
-        this.updatePosition();
+        super.updatePosition();
       } else {
         clearInterval(jumpInterval);
         this.fall();
@@ -121,7 +133,7 @@ class Character {
     const gravityInterval = setInterval(() => {
       if (this.y < 530) {  // Suelo.
         this.y += 10;  // Caida por intervalo.
-        this.updatePosition();
+        super.updatePosition();
       } else {
         this.y = 530;
         clearInterval(gravityInterval);
@@ -131,8 +143,7 @@ class Character {
   }
   
   updatePosition() {
-    this.element.style.left = `${this.x}px`;
-    this.element.style.top = `${this.y}px`;
+    super.updatePosition();
   }
 
   collisionWith(object) {
@@ -160,20 +171,11 @@ class Character {
 
 }
 
-class Coin {
+class Coin extends Entity {
   constructor() {
-    this.x = Math.random() * 1300 + 50;
-    this.y = Math.random() * 520 + 50;
-    this.width = 30;
-    this.height = 30;
-    this.element = document.createElement("div");
+    super(Math.random() * 1300 + 50, Math.random() * 520 + 50, 30, 30);
     this.element.classList.add("moneda");
-    this.updatePosition();
-  }
-
-  updatePosition() {
-    this.element.style.left = `${this.x}px`;
-    this.element.style.top = `${this.y}px`;
+    super.updatePosition();
   }
 
   animateFall() {
