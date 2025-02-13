@@ -35,15 +35,21 @@ class Game {
   }
 
   checkCollisions() {
-    setTimeout(() => {
-      if (this.container.contains(coin.element)) {
-        this.container.removeChild(coin.element);
-        this.coins.splice(index, 1);
-        this.score++;
-        this.updateScore();
-        this.finishGame();
-      }
-    }, 2000);    
+    setInterval(() => {
+      this.coins.forEach((coin, index) => {
+        if (this.character.collisionWith(coin)) {
+          // this.character.fall(); //Llamada metodo interrumpir salto personaje SE BUGEA y da botes al tocar el suelo
+          coin.animateFall(); 
+          setTimeout(() => {
+            this.container.removeChild(coin.element);
+            this.coins.splice(index, 1);
+            this.score++;
+            this.updateScore();
+            this.finishGame();
+          }, 2000)
+        }
+      });
+    }, 100);
   }
 
   screenResButEvent(button) {
