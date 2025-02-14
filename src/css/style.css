@@ -1,15 +1,28 @@
+:root {
+  --white-color: #ffffff;
+  --light-gray-color: #d4d4d4;
+  --dark-gray-color: #4c4c4c;
+  --border-gray-color: #6d6d6d;
+  --red-color: #ff3030;
+  --orange-color: #ff6600;
+  --blue-color: #0084a8;
+  --collapsible-background-color: #0a0a32;
+  --collapsible-text-color: #d4d4d4;
+  --key-background-color: #222;
+}
+
 @font-face {
-  font-family: 'Pixeloid Mono';
-  src: url('/public/fonts/PixeloidMono-d94EV.ttf') format('truetype');
+  font-family: "Pixeloid Mono";
+  src: url("/public/fonts/PixeloidMono-d94EV.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 body {
   margin: 0;
-  font-family: 'Pixeloid Mono';
+  font-family: "Pixeloid Mono";
   overflow: hidden;
-  background-color: #4c4c4c;
+  background-color: var(--dark-gray-color);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -21,24 +34,26 @@ body {
 /*USAR VW (ancho) y VH (alto) SIEMPRE COMO UNIDAD */
 
 h1 {
-  color: #FFFFFF;
+  color: var(--white-color);
   text-shadow: 4px 4px 0px black;
   position: relative;
   left: -100vw; /* Empieza fuera de la pantalla */
-  animation: slide-in  ease-out forwards;
+  animation: slide-in 4s ease-out forwards;
 }
+
 #puntos {
-  color: #D4D4D4;
- } 
+  color: var(--light-gray-color);
+}
+
 #game-container {
   position: relative;
   width: 90vw;
   max-width: 1400px;
-  height: 60vh;  
+  height: 60vh;
   max-height: 600px;
   margin: 20px auto;
-  border: 2px solid #6d6d6d;
-  color: #FF3030;
+  border: 2px solid var(--border-gray-color);
+  color: var(--red-color);
   text-shadow: 2px 2px 0px black;
   background-image: url("/public/images/background_Game.avif");
   background-repeat: no-repeat;
@@ -47,7 +62,7 @@ h1 {
   overflow: hidden;
   border-radius: 30px;
   font-size: 18vh;
-  text-align: center;  
+  text-align: center;
 }
 
 #container-text {
@@ -60,17 +75,18 @@ h1 {
   max-width: 50px;
   height: 5vh;
   max-height: 50px;
-  background-image: url("public/images/mainCharacter.webp");
+  background-image: url("/public/images/mainCharacter.webp");
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 .moneda {
   position: absolute;
   width: 3vw;
-  max-width: 30px;
+  max-width: 50px;
   height: 3vh;
-  max-height: 30px;
-  background-image: url("public/images/asteroid.webp");
+  max-height: 50px;
+  background-image: url("/public/images/asteroid.webp");
   background-size: 100% 100%;
 }
 
@@ -78,36 +94,36 @@ h1 {
   animation: fall 2s forwards;
 }
 
-#resetButton {
+#resetButton, #muteButton {
   margin-top: 2vh;
-  background-color: #FF6600;
-  color: #FFFFFF;
+  background-color: var(--orange-color);
+  color: var(--white-color);
   cursor: pointer;
   padding: 1vh;
   border: none;
   text-align: left;
   outline: none;
   font-size: 15px;
-  font-family: 'Pixeloid Mono';
+  font-family: "Pixeloid Mono";
 }
 
-#resetButton:hover {
-  background-color: #0084A8;
+#resetButton:hover, #muteButton:hover {
+  background-color: var(--blue-color);
 }
 
-#resetButton:active {
+#resetButton:active, #muteButton:active {
   transform: scale(0.9);
 }
 
 .collapsible-container {
   width: 100%;
   display: block;
-  }
+}
 
 .collapsible {
   margin-top: 4vh;
-  background-color: #FF6600;
-  color: #FFFFFF;
+  background-color: var(--orange-color);
+  color: var(--white-color);
   cursor: pointer;
   padding: 1vh;
   border: none;
@@ -119,21 +135,22 @@ h1 {
 
 .collapsible h3 {
   text-align: center;
-  font-family: 'Pixeloid Mono';
+  font-family: "Pixeloid Mono";
   font-size: large;
   margin: 0;
 }
 
-.active, .collapsible:hover {
-  background-color: #0084A8;
+.active,
+.collapsible:hover {
+  background-color: var(--blue-color);
 }
 
 .bb__collapsible {
   padding: 0 18px;
   display: none;
   overflow: hidden;
-  background-color: #0A0A32;
-  color: #D4D4D4 ;
+  background-color: var(--collapsible-background-color);
+  color: var(--collapsible-text-color);
   list-style-position: inside;
   transition: max-height 0.3s ease;
   margin-bottom: 2vh;
@@ -151,28 +168,43 @@ h1 {
 }
 
 .bb__collapsible .key {
-  background-color: #222;
+  background-color: var(--key-background-color);
   padding: 0.3vh 0.8vw;
-  border: 1px solid #FF6600;
+  border: 1px solid var(--orange-color);
   display: inline-block;
   border-radius: 3px;
-  color: #FFF;
+  color: var(--white-color);
   font-weight: bold;
   font-size: 0.9em;
 }
 
 @keyframes fall {
-  from { transform: translateY(0); }
-  to { top: 600px; opacity: 0; }
+  from {
+    transform: translateY(0);
+  }
+  to {
+    top: 600px;
+    opacity: 0;
+  }
 }
 
 @keyframes blink {
-  0% { opacity: 1; }
-  50% { opacity: 0; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 @keyframes slide-in {
-  0% { left: -100vw; }
-  100% { left: 0; }
+  0% {
+    left: -100vw;
+  }
+  100% {
+    left: 0;
+  }
 }

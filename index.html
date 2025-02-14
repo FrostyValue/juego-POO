@@ -4,8 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Asteroid breaker</title>
-    <link rel="stylesheet" href="style.css" />
-    <script type="module" src="main.js" defer></script>
+    <link rel="shortcut icon" href="/public/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/src/css/style.css" />
+    <script type="module" src="/src/scripts/main.js" defer></script>
+    <script type="module" src="/src/scripts/game.js" defer></script>
   </head>
   <body>
     <h1>ASTEROID BREAKER</h1>
@@ -13,16 +15,26 @@
     <div id="game-container">
       <span id="container-text"></span>
     </div>
-    <button id="resetButton" type="button">Reset</button>
+    <div id="div-buttons">
+      <button id="resetButton" type="button">Reset</button>
+      <button id="muteButton" type="button">Mute</button>
+    </div>
 
-    <button class="collapsible"><h3>Controles del Juego</h3></button>
+    <button class="collapsible"><h3>Game Controls</h3></button>
     <div class="bb__collapsible">
       <div class="controls-container">
         <ul class="controls-list">
-          <li><span class="key">W</span> / <span class="key">↑</span> - Saltar</li>
-          <li><span class="key">A</span> / <span class="key">←</span> - Mover Izquierda</li>
-          <li><span class="key">D</span> / <span class="key">→</span> - Mover Derecha</li>
-          <li><span class="key">R</span> - Reiniciar</li>
+          <li>
+            <span class="key">W</span> / <span class="key">↑</span> - Jump
+          </li>
+          <li>
+            <span class="key">A</span> / <span class="key">←</span> - Left
+          </li>
+          <li>
+            <span class="key">D</span> / <span class="key">→</span> - Right
+          </li>
+          <li><span class="key">R</span> - Restart</li>
+          <li><span class="key">M</span> - Mute</li>
         </ul>
       </div>
     </div>

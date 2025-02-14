@@ -2,16 +2,20 @@ class Game {
   constructor() {
     this.container = document.getElementById("game-container");
     this.scoreElement = document.getElementById("puntos");
-    this.resetButton =  document.getElementById("resetButton");
+    this.resetButton = document.getElementById("resetButton");
+    this.muteButton = document.getElementById("muteButton");
     this.containerText = document.getElementById("container-text");
     this.character = null;
     this.coins = [];
     this.score = 0;
     this.asteroids = this.introduceAsteroids(); //Cantidad de elementos a romper en el escenario
+    this.mute = false;
+
     this.createScenary();
     this.addEvents();
     this.checkCollisions();
     this.updateScore();
+    this.screenMuButtonEvent(this.muteButton);
     this.screenResButEvent(this.resetButton);
   }
 
@@ -30,37 +34,50 @@ class Game {
     window.addEventListener("keydown", (e) => {
       this.character.move(e);
       this.buttonEvent(e);
-      }
-  );
+    });
   }
 
+  // Logica de colisiones modificada para que no entre en conflicto con la animacion, si no se marca como cayendo y se deja 
+  // la version anterior no contabiliza algunos asteroides, creandose un bug en el juego que impide su finalización.
   checkCollisions() {
     setInterval(() => {
-      this.coins.forEach((coin, index) => {
-        if (this.character.collisionWith(coin)) {
-          // this.character.fall(); //Llamada metodo interrumpir salto personaje SE BUGEA y da botes al tocar el suelo
-          coin.animateFall(); 
+      this.coins = this.coins.filter((coin) => {
+        if (this.character.collisionWith(coin) && !coin.isFalling) { //Se comprueba que la moneda no esta cayendo a parte de la colision.
+          coin.isFalling = true; //Aqui se marca que esta cayendo
+          coin.animateFall();
           setTimeout(() => {
             this.container.removeChild(coin.element);
-            this.coins.splice(index, 1);
             this.score++;
             this.updateScore();
             this.finishGame();
-          }, 2000)
+          }, 2000);
+          return false;
         }
+        return true;
       });
     }, 100);
   }
 
   screenResButEvent(button) {
-    button.addEventListener('click', () => { //Funcion flecha necesaria
+    button.addEventListener("click", () => {
       this.resetGame();
     });
-  };
+  }
 
-  buttonEvent(event){ //Resetea el juego con la r
-    if (event.key == "r"){
+  screenMuButtonEvent(button) {
+    button.addEventListener(`click`, () => {
+      this.muteGame();
+    });
+  }
+
+  buttonEvent(event) {
+    //Resetea el juego con la r
+    if (event.key == "r") {
       this.resetGame();
+    }
+
+    if (event.key == "m") {
+        this.muteGame();
     }
   }
 
@@ -71,48 +88,71 @@ class Game {
   finishGame() {
     if (this.score === this.asteroids) {
       this.containerText.textContent = `You won`;
-      this.endSound();
+      this.endSound(this.mute);
       setTimeout(() => this.resetGame(), 3000);
     }
-  };
+  }
 
   resetGame() {
     this.containerText.textContent = `Restarting game...`;
-  
+
     setTimeout(() => {
       this.character.jumpSound(true);
-      
+
       // Eliminar solo los elementos dinámicos (personaje y asteroides), sin borrar el mensaje
-      this.container.querySelectorAll(".personaje, .moneda").forEach(el => el.remove());
-  
+      this.container
+        .querySelectorAll(".personaje, .moneda")
+        .forEach((el) => el.remove());
+
       this.score = 0;
       this.updateScore();
       this.createScenary();
-  
+
       // Borrar el mensaje despues de 1,5s
       setTimeout(() => {
         this.containerText.textContent = "";
       }, 1500);
-  
     }, 1550);
   }
-  
-  
-  introduceAsteroids(){
+
+  muteGame() {
+    if (this.mute === true) {
+        this.mute = false;
+        this.muteButton.textContent = "";
+        this.muteButton.textContent = "Mute"
+    }
+
+    else {
+        this.mute = true;
+        this.muteButton.textContent = "";
+        this.muteButton.textContent = "Unmute"
+    }
+
+  }
+
+  introduceAsteroids() {
     let asteroidsNum;
     while (true) {
-      asteroidsNum = parseInt(prompt("Introduce la cantidad de asteroides que quieres:"));
-      if (!isNaN(asteroidsNum) && asteroidsNum > 0) return asteroidsNum;
-      alert("Valor no válido. Introduce un número mayor a 0.");
+      asteroidsNum = parseInt(
+        prompt("Introduce la cantidad de asteroides que quieres (max 20):")
+      );
+      if (!isNaN(asteroidsNum) && asteroidsNum > 0 && asteroidsNum < 21)
+        return asteroidsNum;
+      alert(
+        "Valor no válido. Introduce un número mayor a 0 y menor o igual a 20."
+      );
     }
   }
 
-  endSound() {
+  endSound(mute) {
+    while (mute) {
+      return;
+    }
+
     const audio = document.getElementById("audioEnd");
     audio.currentTime = 0;
     audio.play();
-  };
-
+  }
 }
 
 class Entity {
@@ -128,7 +168,6 @@ class Entity {
     this.element.style.left = `${this.x}px`;
     this.element.style.top = `${this.y}px`;
   }
-
 }
 
 class Character extends Entity {
@@ -150,14 +189,16 @@ class Character extends Entity {
     }
 
     super.updatePosition();
-
   }
 
   jump() {
     this.jumping = true;
     let maxHeight = this.y - 480;
-    this.jumpSound(false); //Insercion de efecto de sonido salto.
-
+    if (game.mute) {
+      this.jumpSound(true);
+    } else {
+      this.jumpSound(false); //Insercion de efecto de sonido salto.
+    }
     const jumpInterval = setInterval(() => {
       if (this.y > maxHeight) {
         this.y -= 10;
@@ -171,8 +212,9 @@ class Character extends Entity {
 
   fall() {
     const gravityInterval = setInterval(() => {
-      if (this.y < 520) {  // Suelo.
-        this.y += 10;  // Caida por intervalo.
+      if (this.y < 520) {
+        // Suelo.
+        this.y += 10; // Caida por intervalo.
         super.updatePosition();
       } else {
         this.y = 520;
@@ -184,8 +226,9 @@ class Character extends Entity {
 
   fallCollision() {
     const gravityInterval = setInterval(() => {
-      if (this.y < 520) {  // Suelo.
-        this.y += 10;  // Caida por intervalo.
+      if (this.y < 520) {
+        // Suelo.
+        this.y += 10; // Caida por intervalo.
         super.updatePosition();
       } else {
         this.y = 520;
@@ -202,26 +245,23 @@ class Character extends Entity {
       this.y < object.y + object.height &&
       this.y + this.height > object.y
     );
-
   }
 
   jumpSound(end) {
     const audio = document.getElementById("audioJump");
-    if (end == true) { //DETENCION DEL SONIDO AL FINAL DEL JUEGO
+    if (end == true) {
+      //DETENCION DEL SONIDO AL FINAL DEL JUEGO/MUTE
       audio.pause();
+    } else {
+      audio.currentTime = 0;
+      audio.play();
     }
-    else {
-    audio.currentTime = 0;
-    audio.play();
-    }
-
-  };
-
+  }
 }
 
 class Coin extends Entity {
   constructor() {
-    super(Math.random() * 1300 + 50, Math.random() * 480 + 50, 30, 30);
+    super(Math.random() * 1300 + 50, Math.random() * 480 + 50, 50, 50);
     this.element.classList.add("moneda");
     super.updatePosition();
   }
@@ -229,23 +269,6 @@ class Coin extends Entity {
   animateFall() {
     this.element.classList.add("coin-fall");
   }
-
 }
 
 const game = new Game();
-
-//CODIGO COLLAPSIBLE
-
-let coll = document.getElementsByClassName("collapsible");
-
-for (let i = 0; i < coll.length; i++) {
-  coll[i].addEventListener("click", function() {
-    this.classList.toggle("active");
-    let content = this.nextElementSibling;
-    if (content.style.display === "block") {
-      content.style.display = "none";
-    } else {
-      content.style.display = "block";
-    }
-  });
-}
