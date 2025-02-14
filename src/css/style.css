@@ -13,7 +13,7 @@
 
 @font-face {
   font-family: "Pixeloid Mono";
-  src: url("/public/fonts/PixeloidMono-d94EV.ttf") format("truetype");
+  src: url("./public/fonts/PixeloidMono-d94EV.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
@@ -55,7 +55,7 @@ h1 {
   border: 2px solid var(--border-gray-color);
   color: var(--red-color);
   text-shadow: 2px 2px 0px black;
-  background-image: url("/public/images/background_Game.avif");
+  background-image: url("./public/images/background_Game.avif");
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-position: center;
@@ -75,7 +75,7 @@ h1 {
   max-width: 50px;
   height: 5vh;
   max-height: 50px;
-  background-image: url("/public/images/mainCharacter.webp");
+  background-image: url("./public/images/mainCharacter.webp");
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -86,7 +86,7 @@ h1 {
   max-width: 50px;
   height: 3vh;
   max-height: 50px;
-  background-image: url("/public/images/asteroid.webp");
+  background-image: url("./public/images/asteroid.webp");
   background-size: 100% 100%;
 }
 
