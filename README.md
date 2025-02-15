@@ -22,12 +22,12 @@ Este es un juego desarrollado en JavaScript. Se llama Asteroid Breaker, el perso
 │   ├── 📂 images     # Imágenes y gráficos
 ├── 📂 src            # Código fuente
 │   ├── 📂 css        # Estilos CSS
-│   │   ├── style.css # Hoja de estilos principal
+│   │   ├─🎨 style.css # Hoja de estilos principal
 │   ├── 📂 scripts    # Archivos JavaScript
-│   │   ├── game.js   # Lógica principal del juego
-│   │   ├── main.js   # Script de inicialización
-├── index.html        # Página principal del juego
-├── README.md         # Documentación del proyecto
+│   │   ├─🚀 game.js   # Lógica principal del juego
+│   │   ├─📜 main.js   # Script de inicialización
+├─📄 index.html        # Página principal del juego
+├─📄 README.md         # Documentación del proyecto
 ```
 
 ## 🎮 Controles
