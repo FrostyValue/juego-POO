@@ -299,8 +299,3 @@ class Coin extends Entity {
 }
 
 const game = new Game();
-
-document.addEventListener("DOMContentLoaded", () => {
-  game.character.updatePosition();
-  game.coins.forEach(coin => coin.updatePosition());
-});
