@@ -5,6 +5,8 @@ class Game {
     this.resetButton = document.getElementById("resetButton");
     this.muteButton = document.getElementById("muteButton");
     this.containerText = document.getElementById("container-text");
+    this.containerWidth = this.container.clientWidth;
+    this.containerHeight = this.container.clientHeight;
     this.character = null;
     this.coins = [];
     this.score = 0;
@@ -35,6 +37,12 @@ class Game {
       this.character.move(e);
       this.buttonEvent(e);
     });
+
+    window.addEventListener("resize", () => {
+      game.character.updatePosition();
+      game.coins.forEach(coin => coin.updatePosition());
+    });
+
   }
 
   // Logica de colisiones modificada para que no entre en conflicto con la animacion, si no se marca como cayendo y se deja 
@@ -153,6 +161,7 @@ class Game {
     audio.currentTime = 0;
     audio.play();
   }
+  
 }
 
 class Entity {
@@ -172,16 +181,24 @@ class Entity {
 
 class Character extends Entity {
   constructor() {
-    super(650, 520, 50, 50);
-    this.speed = 10;
+    const container = document.getElementById("game-container");
+    const containerWidth = container.clientWidth;
+    const containerHeight = container.clientHeight;
+
+    super(containerWidth * 0.5, containerHeight * 0.85, containerWidth * 0.05, containerHeight * 0.1);
+    
+    this.container = container;
+    this.speed = containerWidth * 0.02;
     this.jumping = false;
     this.element.classList.add("personaje");
     super.updatePosition();
   }
 
   move(event) {
+    const containerWidth = this.container.clientWidth; // Obtener el ancho actualizado
+
     if (event.key === "ArrowRight" || event.key === "d") {
-      if (this.x + this.speed < 1335) this.x += this.speed; // Evitar que salga del contenedor
+      if (this.x + this.speed < containerWidth - this.width) this.x += this.speed; // Evitar que salga del contenedor
     } else if (event.key === "ArrowLeft" || event.key === "a") {
       if (this.x - this.speed > 0) this.x -= this.speed;
     } else if (event.key === "ArrowUp" || event.key === "w") {
@@ -261,7 +278,17 @@ class Character extends Entity {
 
 class Coin extends Entity {
   constructor() {
-    super(Math.random() * 1300 + 50, Math.random() * 480 + 50, 50, 50);
+    const container = document.getElementById("game-container");
+    const containerWidth = container.clientWidth;
+    const containerHeight = container.clientHeight;
+
+    super(
+      Math.random() * (containerWidth * 0.9) + (containerWidth * 0.05),
+      Math.random() * (containerHeight * 0.8) + (containerHeight * 0.1),
+      containerWidth * 0.05,
+      containerHeight * 0.1
+    );
+
     this.element.classList.add("moneda");
     super.updatePosition();
   }
@@ -272,3 +299,8 @@ class Coin extends Entity {
 }
 
 const game = new Game();
+
+document.addEventListener("DOMContentLoaded", () => {
+  game.character.updatePosition();
+  game.coins.forEach(coin => coin.updatePosition());
+});
