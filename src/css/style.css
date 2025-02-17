@@ -22,7 +22,9 @@ body {
   margin: 0;
   font-family: "Pixeloid Mono";
   overflow: hidden;
-  background-color: var(--dark-gray-color);
+  background-image: url(../../public/images/background.webp);
+  background-size: 100% 100%;
+  /* background-color: var(--dark-gray-color); */
   display: flex;
   flex-direction: column;
   justify-content: center;

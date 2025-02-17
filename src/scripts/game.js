@@ -10,7 +10,8 @@ class Game {
     this.character = null;
     this.coins = [];
     this.score = 0;
-    this.asteroids = this.introduceAsteroids(); //Cantidad de elementos a romper en el escenario
+    this.level = 1;
+    this.asteroids = this.introduceAsteroids();
     this.mute = false;
 
     this.createScenary();
@@ -95,28 +96,30 @@ class Game {
 
   finishGame() {
     if (this.score === this.asteroids) {
-      this.containerText.textContent = `You won`;
-      this.endSound(this.mute);
-      setTimeout(() => this.resetGame(), 3000);
+      if (this.level < 200) {
+        this.level++;
+        if (this.level % 25 === 0) {
+          this.character.increaseSpeed();
+        }
+        this.resetGame(false);
+      } else {
+        this.containerText.textContent = `You completed all levels!`;
+        this.endSound(this.mute);
+        setTimeout(() => this.resetGame(true), 3000);
+      }
     }
   }
 
-  resetGame() {
+  resetGame(fullReset) {
     this.containerText.textContent = `Restarting game...`;
-
     setTimeout(() => {
       this.character.jumpSound(true);
-
-      // Eliminar solo los elementos dinámicos (personaje y asteroides), sin borrar el mensaje
-      this.container
-        .querySelectorAll(".personaje, .moneda")
-        .forEach((el) => el.remove());
-
+      this.container.querySelectorAll(".personaje, .moneda").forEach((el) => el.remove());
       this.score = 0;
+      this.asteroids = this.introduceAsteroids();
+      if (fullReset) this.level = 1;
       this.updateScore();
       this.createScenary();
-
-      // Borrar el mensaje despues de 1,5s
       setTimeout(() => {
         this.containerText.textContent = "";
       }, 1500);
@@ -139,17 +142,11 @@ class Game {
   }
 
   introduceAsteroids() {
-    let asteroidsNum;
-    while (true) {
-      asteroidsNum = parseInt(
-        prompt("Introduce la cantidad de asteroides que quieres (max 20):")
-      );
-      if (!isNaN(asteroidsNum) && asteroidsNum > 0 && asteroidsNum < 21)
-        return asteroidsNum;
-      alert(
-        "Valor no válido. Introduce un número mayor a 0 y menor o igual a 20."
-      );
-    }
+    return this.level; // Asteroides igual al nivel actual
+  }
+
+  updateScore() {
+    this.scoreElement.textContent = `Level ${this.level} - ${this.score} asteroids broken of ${this.asteroids}.`;
   }
 
   endSound(mute) {
@@ -184,9 +181,7 @@ class Character extends Entity {
     const container = document.getElementById("game-container");
     const containerWidth = container.clientWidth;
     const containerHeight = container.clientHeight;
-
     super(containerWidth * 0.5, containerHeight * 0.85, containerWidth * 0.05, containerHeight * 0.1);
-    
     this.container = container;
     this.speed = containerWidth * 0.02;
     this.jumping = false;
@@ -241,6 +236,7 @@ class Character extends Entity {
     }, 20);
   }
 
+
   fallCollision() {
     const gravityInterval = setInterval(() => {
       if (this.y < 520) {
@@ -262,6 +258,7 @@ class Character extends Entity {
       this.y < object.y + object.height &&
       this.y + this.height > object.y
     );
+
   }
 
   jumpSound(end) {
@@ -274,6 +271,11 @@ class Character extends Entity {
       audio.play();
     }
   }
+
+  increaseSpeed() {
+    this.speed *= 1.1; // Aumenta la velocidad en un 10%
+  }
+  
 }
 
 class Coin extends Entity {
